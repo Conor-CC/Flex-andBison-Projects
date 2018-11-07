@@ -162,27 +162,8 @@ extern FILE *yyin, *yyout;
 #define EOB_ACT_END_OF_FILE 1
 #define EOB_ACT_LAST_MATCH 2
     
-    /* Note: We specifically omit the test for yy_rule_can_match_eol because it requires
-     *       access to the local variable yy_act. Since yyless() is a macro, it would break
-     *       existing scanners that call yyless() from OUTSIDE yylex.
-     *       One obvious solution it to make yy_act a global. I tried that, and saw
-     *       a 5% performance hit in a non-yylineno scanner, because yy_act is
-     *       normally declared as a register variable-- so it is not worth it.
-     */
-    #define  YY_LESS_LINENO(n) \
-            do { \
-                int yyl;\
-                for ( yyl = n; yyl < yyleng; ++yyl )\
-                    if ( yytext[yyl] == '\n' )\
-                        --yylineno;\
-            }while(0)
-    #define YY_LINENO_REWIND_TO(dst) \
-            do {\
-                const char *p;\
-                for ( p = yy_cp-1; p >= (dst); --p)\
-                    if ( *p == '\n' )\
-                        --yylineno;\
-            }while(0)
+    #define YY_LESS_LINENO(n)
+    #define YY_LINENO_REWIND_TO(ptr)
     
 /* Return all but the first "n" matched characters back to the input stream. */
 #define yyless(n) \
@@ -341,9 +322,6 @@ void yyfree ( void *  );
 #define YY_AT_BOL() (YY_CURRENT_BUFFER_LVALUE->yy_at_bol)
 
 /* Begin user sect3 */
-
-#define yywrap() (/*CONSTCOND*/1)
-#define YY_SKIP_YYWRAP
 typedef flex_uint8_t YY_CHAR;
 
 FILE *yyin = NULL, *yyout = NULL;
@@ -373,8 +351,8 @@ static void yynoreturn yy_fatal_error ( const char* msg  );
 	(yy_hold_char) = *yy_cp; \
 	*yy_cp = '\0'; \
 	(yy_c_buf_p) = yy_cp;
-#define YY_NUM_RULES 14
-#define YY_END_OF_BUFFER 15
+#define YY_NUM_RULES 18
+#define YY_END_OF_BUFFER 19
 /* This struct is not used in this scanner,
    but its presence is necessary. */
 struct yy_trans_info
@@ -382,11 +360,11 @@ struct yy_trans_info
 	flex_int32_t yy_verify;
 	flex_int32_t yy_nxt;
 	};
-static const flex_int16_t yy_accept[29] =
+static const flex_int16_t yy_accept[22] =
     {   0,
-        0,    0,   15,   13,   12,   10,    6,    7,    3,    1,
-        2,   13,    4,    9,    5,    9,   11,    8,    9,    0,
-       11,    8,    0,    0,    9,    0,    8,    0
+        0,    0,   19,   17,   16,   15,    3,    1,    2,    4,
+       12,   13,    8,   11,   14,    9,   10,    6,    5,    7,
+        0
     } ;
 
 static const YY_CHAR yy_ec[256] =
@@ -394,17 +372,17 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1,    1,    1,    1,    2,    3,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    2,    1,    1,    1,    1,    1,    1,    1,    4,
-        5,    6,    7,    1,    8,    9,   10,   11,   11,   11,
-       11,   11,   11,   11,   11,   11,   11,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,   12,    1,
+        1,    2,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    4,    5,    1,    6,    1,    7,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    8,    9,    1,    1,
+        1,    1,   10,    1,    1,   11,   12,    1,    1,    1,
+        1,    1,    1,    1,    1,   13,    1,   14,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
 
-       12,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,   13,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,   15,   16,   17,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
@@ -421,50 +399,41 @@ static const YY_CHAR yy_ec[256] =
         1,    1,    1,    1,    1
     } ;
 
-static const YY_CHAR yy_meta[14] =
-    {   0,
-        1,    1,    2,    1,    1,    1,    3,    3,    1,    1,
-        3,    1,    1
-    } ;
-
-static const flex_int16_t yy_base[32] =
-    {   0,
-        0,    0,   33,   34,   34,   34,   34,   34,   34,   34,
-       34,   21,   21,    5,   34,    7,    0,    9,    0,   19,
-        0,    0,   18,   17,   16,   15,   14,   34,   21,   20,
-       12
-    } ;
-
-static const flex_int16_t yy_def[32] =
-    {   0,
-       28,    1,   28,   28,   28,   28,   28,   28,   28,   28,
-       28,   28,   28,   28,   28,   28,   29,   28,   14,   30,
-       29,   18,   31,   28,   28,   28,   28,    0,   28,   28,
-       28
-    } ;
-
-static const flex_int16_t yy_nxt[48] =
-    {   0,
-        4,    5,    6,    7,    8,    9,   10,   11,   12,   13,
-       14,    4,   15,   18,   26,   19,   20,   16,   20,   22,
-       23,   21,   24,   21,   27,   27,   25,   25,   27,   25,
-       17,   16,   28,    3,   28,   28,   28,   28,   28,   28,
-       28,   28,   28,   28,   28,   28,   28
-    } ;
-
-static const flex_int16_t yy_chk[48] =
+static const YY_CHAR yy_meta[18] =
     {   0,
         1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
-        1,    1,    1,   14,   31,   14,   14,   16,   16,   18,
-       18,   29,   30,   29,   27,   26,   25,   24,   23,   20,
-       13,   12,    3,   28,   28,   28,   28,   28,   28,   28,
-       28,   28,   28,   28,   28,   28,   28
+        1,    1,    1,    1,    1,    1,    1
     } ;
 
-/* Table of booleans, true if rule could match eol. */
-static const flex_int32_t yy_rule_can_match_eol[15] =
+static const flex_int16_t yy_base[22] =
     {   0,
-0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0,     };
+        0,    0,   18,   19,   19,   19,   19,   19,   19,   19,
+       19,   19,   19,   19,   19,   19,   19,   19,   19,   19,
+       19
+    } ;
+
+static const flex_int16_t yy_def[22] =
+    {   0,
+       21,    1,   21,   21,   21,   21,   21,   21,   21,   21,
+       21,   21,   21,   21,   21,   21,   21,   21,   21,   21,
+        0
+    } ;
+
+static const flex_int16_t yy_nxt[37] =
+    {   0,
+        4,    5,    6,    7,    8,    9,   10,   11,   12,   13,
+       14,   15,   16,   17,   18,   19,   20,   21,    3,   21,
+       21,   21,   21,   21,   21,   21,   21,   21,   21,   21,
+       21,   21,   21,   21,   21,   21
+    } ;
+
+static const flex_int16_t yy_chk[37] =
+    {   0,
+        1,    1,    1,    1,    1,    1,    1,    1,    1,    1,
+        1,    1,    1,    1,    1,    1,    1,    3,   21,   21,
+       21,   21,   21,   21,   21,   21,   21,   21,   21,   21,
+       21,   21,   21,   21,   21,   21
+    } ;
 
 static yy_state_type yy_last_accepting_state;
 static char *yy_last_accepting_cpos;
@@ -480,20 +449,19 @@ int yy_flex_debug = 0;
 #define YY_MORE_ADJ 0
 #define YY_RESTORE_YY_MORE_OFFSET
 char *yytext;
-#line 1 "roman.l"
+#line 1 "romcalc.l"
 /* Companion source code for "flex & bison", published by O'Reilly
  * Media, ISBN 978-0-596-15597-1
  * Copyright (c) 2009, Taughannock Networks. All rights reserved.
  * See the README file for license conditions and contact info.
- * $Header: /home/johnl/flnb/code/RCS/fb3-1.l,v 2.1 2009/11/08 02:53:18 johnl Exp $
+ * $Header: /home/johnl/flnb/code/RCS/fb1-5.l,v 2.1 2009/11/08 02:53:18 johnl Exp $
  */
-/* recognize tokens for the calculator */
-#line 11 "roman.l"
-# include "fb3-1.h"
-# include "roman.tab.h"
-#line 495 "lex.yy.c"
-/* float exponent */
-#line 497 "lex.yy.c"
+/* recognize tokens for the calculator and print them out */
+#line 11 "romcalc.l"
+# include "romcalc.tab.h"
+void yyerror(char *s);
+#line 464 "lex.yy.c"
+#line 465 "lex.yy.c"
 
 #define INITIAL 0
 
@@ -710,9 +678,9 @@ YY_DECL
 		}
 
 	{
-#line 18 "roman.l"
+#line 15 "romcalc.l"
 
-#line 716 "lex.yy.c"
+#line 684 "lex.yy.c"
 
 	while ( /*CONSTCOND*/1 )		/* loops until end-of-file is reached */
 		{
@@ -739,13 +707,13 @@ yy_match:
 			while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 				{
 				yy_current_state = (int) yy_def[yy_current_state];
-				if ( yy_current_state >= 29 )
+				if ( yy_current_state >= 22 )
 					yy_c = yy_meta[yy_c];
 				}
 			yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
 			++yy_cp;
 			}
-		while ( yy_base[yy_current_state] != 34 );
+		while ( yy_base[yy_current_state] != 19 );
 
 yy_find_action:
 		yy_act = yy_accept[yy_current_state];
@@ -757,16 +725,6 @@ yy_find_action:
 			}
 
 		YY_DO_BEFORE_ACTION;
-
-		if ( yy_act != YY_END_OF_BUFFER && yy_rule_can_match_eol[yy_act] )
-			{
-			int yyl;
-			for ( yyl = 0; yyl < yyleng; ++yyl )
-				if ( yytext[yyl] == '\n' )
-					
-    yylineno++;
-;
-			}
 
 do_action:	/* This label is used only to access EOF actions. */
 
@@ -780,56 +738,97 @@ do_action:	/* This label is used only to access EOF actions. */
 			goto yy_find_action;
 
 case 1:
-#line 20 "roman.l"
+YY_RULE_SETUP
+#line 16 "romcalc.l"
+{ return ADD; }
+	YY_BREAK
 case 2:
-#line 21 "roman.l"
+YY_RULE_SETUP
+#line 17 "romcalc.l"
+{ return SUB; }
+	YY_BREAK
 case 3:
-#line 22 "roman.l"
+YY_RULE_SETUP
+#line 18 "romcalc.l"
+{ return MUL; }
+	YY_BREAK
 case 4:
-#line 23 "roman.l"
+YY_RULE_SETUP
+#line 19 "romcalc.l"
+{ return DIV; }
+	YY_BREAK
 case 5:
-#line 24 "roman.l"
+YY_RULE_SETUP
+#line 20 "romcalc.l"
+{ return ABS; }
+	YY_BREAK
 case 6:
-#line 25 "roman.l"
+YY_RULE_SETUP
+#line 21 "romcalc.l"
+{ return OPEN; }
+	YY_BREAK
 case 7:
 YY_RULE_SETUP
-#line 25 "roman.l"
-{ return yytext[0]; }
+#line 22 "romcalc.l"
+{ return CLOSE; }
 	YY_BREAK
 case 8:
-#line 27 "roman.l"
+YY_RULE_SETUP
+#line 23 "romcalc.l"
+{ return I; }
+	YY_BREAK
 case 9:
 YY_RULE_SETUP
-#line 27 "roman.l"
-{ yylval.d = atof(yytext); return NUMBER; }
+#line 24 "romcalc.l"
+{ return V; }
 	YY_BREAK
 case 10:
-/* rule 10 can match eol */
 YY_RULE_SETUP
-#line 29 "roman.l"
-{ return EOL; }
+#line 25 "romcalc.l"
+{ return X; }
 	YY_BREAK
 case 11:
 YY_RULE_SETUP
-#line 30 "roman.l"
-
+#line 26 "romcalc.l"
+{ return L; }
 	YY_BREAK
 case 12:
 YY_RULE_SETUP
-#line 31 "roman.l"
-{ /* ignore white space */ }
+#line 27 "romcalc.l"
+{ return C; }
 	YY_BREAK
 case 13:
 YY_RULE_SETUP
-#line 32 "roman.l"
-{ yyerror("Mystery character %c\n", *yytext); }
+#line 28 "romcalc.l"
+{ return D; }
 	YY_BREAK
 case 14:
 YY_RULE_SETUP
-#line 33 "roman.l"
-YY_FATAL_ERROR( "flex scanner jammed" );
+#line 29 "romcalc.l"
+{ return M; }
 	YY_BREAK
-#line 833 "lex.yy.c"
+case 15:
+/* rule 15 can match eol */
+YY_RULE_SETUP
+#line 30 "romcalc.l"
+{ return EOL; }
+	YY_BREAK
+case 16:
+YY_RULE_SETUP
+#line 31 "romcalc.l"
+{ /* ignore white space */ }
+	YY_BREAK
+case 17:
+YY_RULE_SETUP
+#line 32 "romcalc.l"
+{ yyerror("syntax error\n"); return -1;}
+	YY_BREAK
+case 18:
+YY_RULE_SETUP
+#line 33 "romcalc.l"
+ECHO;
+	YY_BREAK
+#line 832 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -1126,7 +1125,7 @@ static int yy_get_next_buffer (void)
 		while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 			{
 			yy_current_state = (int) yy_def[yy_current_state];
-			if ( yy_current_state >= 29 )
+			if ( yy_current_state >= 22 )
 				yy_c = yy_meta[yy_c];
 			}
 		yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
@@ -1154,11 +1153,11 @@ static int yy_get_next_buffer (void)
 	while ( yy_chk[yy_base[yy_current_state] + yy_c] != yy_current_state )
 		{
 		yy_current_state = (int) yy_def[yy_current_state];
-		if ( yy_current_state >= 29 )
+		if ( yy_current_state >= 22 )
 			yy_c = yy_meta[yy_c];
 		}
 	yy_current_state = yy_nxt[yy_base[yy_current_state] + yy_c];
-	yy_is_jam = (yy_current_state == 28);
+	yy_is_jam = (yy_current_state == 21);
 
 		return yy_is_jam ? 0 : yy_current_state;
 }
@@ -1196,10 +1195,6 @@ static int yy_get_next_buffer (void)
 		}
 
 	*--yy_cp = (char) c;
-
-    if ( c == '\n' ){
-        --yylineno;
-    }
 
 	(yytext_ptr) = yy_bp;
 	(yy_hold_char) = *yy_cp;
@@ -1277,11 +1272,6 @@ static int yy_get_next_buffer (void)
 	c = *(unsigned char *) (yy_c_buf_p);	/* cast for 8-bit char's */
 	*(yy_c_buf_p) = '\0';	/* preserve yytext */
 	(yy_hold_char) = *++(yy_c_buf_p);
-
-	if ( c == '\n' )
-		
-    yylineno++;
-;
 
 	return c;
 }
@@ -1749,9 +1739,6 @@ static int yy_init_globals (void)
      * This function is called from yylex_destroy(), so don't allocate here.
      */
 
-    /* We do not touch yylineno unless the option is enabled. */
-    yylineno =  1;
-    
     (yy_buffer_stack) = NULL;
     (yy_buffer_stack_top) = 0;
     (yy_buffer_stack_max) = 0;
@@ -1846,6 +1833,6 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 33 "roman.l"
+#line 33 "romcalc.l"
 
 

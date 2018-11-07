@@ -1,3 +1,3 @@
-bison -d roman.y
-flex roman.l
-gcc roman.tab.c lex.yy.c fb3-1funcs.c
+bison -d romcalc.y
+flex romcalc.l
+gcc romcalc.tab.c lex.yy.c -lfl
